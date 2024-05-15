@@ -946,7 +946,36 @@ convertToForwardslash(char *str)
 	}
 }
 
-// cut the leader char
+// 将 两个及两个以上连续的 /  换成一个 /
+static void remove_double_forward_slash(char* inputpath) {
+	size_t path_len_org = 0;
+	path_len_org = strlen(inputpath);// not count \0
+	size_t offset = 0;
+	//printf("%s\n", inputpath);
+	while (offset < path_len_org) {
+		if (offset > 0) {
+			if (inputpath[offset - 1] == '/' && inputpath[offset] == '/') {
+				int tmp = offset;
+				while (tmp <= (path_len_org - 1)) {
+					inputpath[tmp] = inputpath[tmp + 1];
+					tmp++;
+				}
+				//printf("%s\n", inputpath);
+				continue;
+			}
+		}
+		offset++;
+	}
+	//printf("%s\n", inputpath);
+	//printf("----\n");
+}
+
+/*
+处理特殊开头的根路径
+	/./x   换成 /x
+	//x    换成 /x
+*/ 
+
 static void pre_cut_path(char* inputpath) {
 	if (!inputpath) {
 		return;
@@ -1022,6 +1051,7 @@ realpath(const char *inputpath, char * resolved)
 		return NULL;
 	}
 
+	remove_double_forward_slash(path);
 	pre_cut_path(path);
 	path_len = strlen(path);
 
