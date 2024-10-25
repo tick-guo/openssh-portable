@@ -1,0 +1,93 @@
+name: 我的MSBuild-Windows
+
+on:
+  #push:
+  #  branches: [ "latestw_all" ]
+  #pull_request:
+  #  branches: [ "latestw_all" ]
+  workflow_dispatch:
+  
+env:
+  ENV_TEST: "变量的用法示例"
+
+permissions:
+  #contents: read
+  # 发布到release需要写权限
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: 检测环境信息
+      shell: cmd
+      run: |
+        echo 系统信息
+        systeminfo
+        echo 当前目录
+        cd
+        echo 环境变量
+        set
+        
+    - uses: actions/checkout@v4
+
+    - name: version
+      shell: cmd
+      run: |
+        echo 组装版本号
+        bash -x .github\workflows\bashtool.sh
+        
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+      with:
+        # Version of Visual Studio to search; defaults to latest if not specified
+        vs-version: '[17.0,18.0)'
+        # The preferred processor architecture of MSBuild. Can be either "x86", "x64", or "arm64". "x64" is only available from Visual Studio version 17.0 and later.
+        msbuild-architecture: x64
+    
+    - name: Build app for release
+      shell: cmd
+      run: |
+        echo 设置路径变量到其他step
+        echo %GITHUB_ENV%
+        echo VS_DIR=%CD%>> %GITHUB_ENV%
+        
+        echo 保存本地起始路径
+        set VS_DIR=%CD%
+        echo 查看git版本信息
+        git branch -vv
+        echo 开始编译
+        rem MSBuild contrib\win32\openssh\Win32-OpenSSH.sln -t:Rebuild -p:Configuration=Release;Platform=x64
+        MSBuild contrib\win32\openssh\not-build-unittest.slnf -t:build -p:Configuration=Release;Platform=x64
+        echo 编译完成，查看文件
+        mkdir bin\x64\release
+        cd bin\x64\release
+        del /q *.pdb
+        echo 7z命令有，tar名有，zip命令没有
+        cd %VS_DIR%
+        tree /f bin
+        7z  a -tzip ${{env.zip_name}}.zip bin
+        echo 结束
+        
+        
+        
+    - name : 编译产物
+      uses: actions/upload-artifact@v4
+      if: true
+      with:
+        name: OpenSSH-Win64-${{env.tag_name}}
+        path: bin
+
+    - name: 发布到Release
+      if: true
+      uses: softprops/action-gh-release@v2
+      with:
+        name: ${{env.name}}
+        tag_name: ${{env.tag_name}}
+        draft: false
+        prerelease: false
+        files: ${{env.VS_DIR}}/${{env.zip_name}}.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+

@@ -1,0 +1,24 @@
+{
+  "solution": {
+    "path": "Win32-OpenSSH.sln",
+    "projects": [
+      "config.vcxproj",
+      "keygen.vcxproj",
+      "libssh.vcxproj",
+      "openbsd_compat.vcxproj",
+      "scp.vcxproj",
+      "sftp-server.vcxproj",
+      "sftp.vcxproj",
+      "ssh-add.vcxproj",
+      "ssh-agent.vcxproj",
+      "ssh-keyscan.vcxproj",
+      "ssh-pkcs11-helper.vcxproj",
+      "ssh-shellhost.vcxproj",
+      "ssh-sk-helper.vcxproj",
+      "ssh.vcxproj",
+      "sshd-session.vcxproj",
+      "sshd.vcxproj",
+      "win32iocompat.vcxproj"
+    ]
+  }
+}
