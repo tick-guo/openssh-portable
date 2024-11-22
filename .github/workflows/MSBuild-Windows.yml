@@ -18,6 +18,7 @@ permissions:
 jobs:
   build:
     runs-on: windows-latest
+    environment: pfx_key
 
     steps:
     - name: 检测环境信息
@@ -67,6 +68,9 @@ jobs:
         echo 7z命令有，tar名有，zip命令没有
         cd %VS_DIR%
         tree /f bin
+        echo 进行数字签名
+        .\.github\workflows\mydata\signtool.exe  sign  /fd SHA256 /f .\.github\workflows\mydata\tick.pfx /p ${{ secrets.PFX_PASS }} /t http://timestamp.digicert.com /debug  .\bin\x64\Release\* 
+        echo 压缩打包
         7z  a -tzip ${{env.zip_name}}.zip bin
         echo 结束
         
