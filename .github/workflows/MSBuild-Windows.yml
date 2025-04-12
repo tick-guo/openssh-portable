@@ -96,7 +96,7 @@ jobs:
         tag_name: ${{env.tag_name}}
         draft: false
         prerelease: false
-        files: ${{env.VS_DIR}}/${{env.zip_name}}.zip
+        files: ${{env.VS_DIR}}/*.zip
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
