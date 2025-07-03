@@ -1,10 +1,10 @@
 name: 我的MSBuild-Windows
 
 on:
-  #push:
-  #  branches: [ "latestw_all" ]
-  #pull_request:
-  #  branches: [ "latestw_all" ]
+  push:
+    branches: [ "latestw_all" ]
+  pull_request:
+    branches: [ "latestw_all" ]
   workflow_dispatch:
   
 env:
