@@ -69,9 +69,14 @@ jobs:
         #dir /s "C:\Program Files"
         #dir /s "C:\Program Files (x86)"
         
+        echo DO vcpkg install
+        cd contrib\win32\openssh
+        vcpkg install
+        
+        cd "%VS_DIR%"
         echo 开始编译
-        rem MSBuild contrib\win32\openssh\Win32-OpenSSH.sln -t:Rebuild -p:Configuration=Release;Platform=x64
-        MSBuild contrib\win32\openssh\not-build-unittest.slnf -t:build -p:Configuration=Release;Platform=x64
+        MSBuild contrib\win32\openssh\Win32-OpenSSH.sln -t:Rebuild -p:Configuration=Release;Platform=x64
+        rem MSBuild contrib\win32\openssh\not-build-unittest.slnf -t:build -p:Configuration=Release;Platform=x64
         echo 编译完成，查看文件
         rem 这个目录正常来说已经有了。
         mkdir bin\x64\release
