@@ -33,6 +33,11 @@ jobs:
         
     - uses: actions/checkout@v4
 
+    - uses: ChristopheLav/windows-sdk-install@v1
+      with:
+        version-sdk: 10.0.22621.0
+        #features:
+
     - name: version
       shell: cmd
       # 设置到变量 $GITHUB_ENV
@@ -60,8 +65,8 @@ jobs:
         echo 查看git版本信息
         git branch -vv
         
-        dir /s "C:\Program Files"
-        dir /s "C:\Program Files (x86)"
+        #dir /s "C:\Program Files"
+        #dir /s "C:\Program Files (x86)"
         
         echo 开始编译
         rem MSBuild contrib\win32\openssh\Win32-OpenSSH.sln -t:Rebuild -p:Configuration=Release;Platform=x64
