@@ -66,8 +66,8 @@ jobs:
         echo 查看git版本信息
         git branch -vv
         
-        #dir /s "C:\Program Files"
-        #dir /s "C:\Program Files (x86)"
+        rem dir /s "C:\Program Files"
+        rem dir /s "C:\Program Files (x86)"
         
         echo DO vcpkg install
         cd contrib\win32\openssh
