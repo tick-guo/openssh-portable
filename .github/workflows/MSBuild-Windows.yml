@@ -57,7 +57,7 @@ jobs:
     - name: run powershell build 
       shell: powershell
       run: |
-        my_build.ps1
+        ./my_build.ps1
         
     - name: Build app for release
       shell: cmd
